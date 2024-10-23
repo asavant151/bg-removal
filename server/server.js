@@ -6,25 +6,16 @@ import userRouter from './routes/userRoutes.js';
 
 // App Config
 const PORT = process.env.PORT || 4000;
+const app = express();
+await connectDB();
 
-const startServer = async () => {
-  const app = express();
-  try {
-    await connectDB();
+// Intialize Middlewares
+app.use(express.json());
+app.use(cors());
 
-    // Initialize Middlewares
-    app.use(express.json());
-    app.use(cors());
 
-    // App routes
-    app.get('/', (req, res) => res.send("API Working"));
-    app.use('/api/user', userRouter);
+// App routes
+app.get('/', (req,res) => res.send("API Working"));
+app.use('/api/user', userRouter)
 
-    app.listen(PORT, () => console.log("Server Running on port " + PORT));
-  } catch (error) {
-    console.error("Error starting server:", error);
-    process.exit(1); // Exit the process if the server fails to start
-  }
-};
-
-startServer();
+app.listen(PORT, () => console.log("Server Running on port " + PORT));
