@@ -1,19 +1,25 @@
 import mongoose from "mongoose";
 
+let isConnected; // track the connection status
+
 const connectDB = async () => {
+  if (isConnected) {
+    console.log('Reusing existing database connection');
+    return;
+  }
 
-    try {
-        const conn = await mongoose.connect(`${process.env.MONGODB_URI}/bg-removal/?retryWrites=true&w=majority&appName=Cluster0`, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        });
-        console.log(`MongoDB Connected: ${conn.connection.host}`);
-        
-    } catch (error) {
-        console.error(`Error: ${error.message}`);
-        process.exit(1);
-    }
+  try {
+    const db = await mongoose.connect(`${process.env.MONGODB_URI}/bg-removal`, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
 
-}
+    isConnected = db.connections[0].readyState;
+    console.log('MongoDB connected:', isConnected);
+  } catch (error) {
+    console.error('Error connecting to MongoDB:', error);
+    throw error; // Ensure any DB connection failure is reported
+  }
+};
 
 export default connectDB;
