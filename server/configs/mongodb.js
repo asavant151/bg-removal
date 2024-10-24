@@ -5,7 +5,7 @@ const connectDB = async () => {
     try {
         const conn = await mongoose.connect(`${process.env.MONGODB_URI}/bg-removal`, {
             useNewUrlParser: true,
-            useUnifiedTopology: true,
+            useUnifiedTopology: true
         });
         console.log(`MongoDB Connected: ${conn.connection.host}`);
         
@@ -13,7 +13,7 @@ const connectDB = async () => {
         console.error(`Error: ${error.message}`);
         process.exit(1);
     }
-    
+
 }
 
 export default connectDB;

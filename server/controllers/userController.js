@@ -31,7 +31,8 @@ const clerkWebhooks = async (req, res) => {
                 }
 
                 await userModel.create(userData)
-                res.json({})
+                res.json({message: 'User Login Successfully'})
+                console.log('User created:', userData);
 
                 break;
             }
@@ -46,7 +47,7 @@ const clerkWebhooks = async (req, res) => {
                 }
 
                 await userModel.findOneAndUpdate({clerkId:data.id}, userData)
-                res.json({})
+                res.json({message: 'User Login Updated Successfully'})
 
                 break;
             }
@@ -55,14 +56,14 @@ const clerkWebhooks = async (req, res) => {
             case "user.deleted": {
 
                 await userModel.findOneAndDelete({clerkId: data.id})
-                res.json({})
+                res.json({message: 'User Delete Successfully'})
 
                 break;
             }
                 
         
             default:
-                break;
+                console.warn(`Unhandled event type: ${type}`);
         }
         
     } catch (error) {
